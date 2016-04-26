@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script type="text/javascript">
+
+			var xhr = createXMLHttpRequestObject();
+
+			function createXMLHttpRequestObject(){
+				var xhr;
+
+				// Create the XMLHttpRequest Object for the IE browser
+				if(window.ActiveXObject){
+					try{
+						xhr = new ActiveXObject("Microsoft.XMLHttp");
+					}catch(e){
+						// Set the value of the xhr object to false 
+						xhr = false;
+					}
+				}else{
+					try{
+						xhr = new XMLHttpRequest();
+					}catch(e){
+						xhr = false;
+					}
+				}
+
+				if(!xhr){
+					alert("Cannot create the xhr object")
+				}else{
+					return xhr;
+				}
+			}
+
+			function process(){
+				if(xhr.readyState == 0 || xhr.readyState == 4){
+					education = encodeURIComponent(document.getElementById("userInput").value);
+					xhr.open("GET", "food_store.php?education="+education, true);
+					xhr.onreadystatechange = handleServerResponse;	
+					xhr.send(null);
+				}else{
+					setTimeout('process()', 1000);
+				}
+			}
+
+			// Function to handle the response from the server
+			function handleServerResponse(){
+				if(xhr.readyState == 4 && xhr.status = 200){
+					xmlResponse = xhr.responseXML;
+					xmlDocumentElement = xmlResponse.documentElement;
+					message = xmlDocumentElement.firstChild.data;
+					document.getElementById("changeDynamically").innerHTML = '<span style="color:blue">' + message + '</span>';
+					setTimeout('process()', 1000);
+				}else{
+					alert("Something went wrong while receiving the response from the server")
+				}
+			}
+
+		</script>
+	</head>
+	<body onload="process()">
+		<h3>The Wonder Food!</h3>
+		Enter the education that you would like to pursue : 
+		<input type="text" id="userInput">
+		<div id="changeDynamically">
+	</body>
+</html>
