@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Asynchronous Calls to the Web Server</title>
+		<script type="text/javascript">
+			var xhr = createXMLHttpRequestObject();
+
+			function createXMLHttpRequestObject(){
+				try{
+					xhr = new XMLHttpRequest();
+				}catch(e){
+					xhr = false;
+				}
+				if(!xhr){
+					alert("Cannot create the XML Http Request Object");
+				}
+				else{
+					return xhr;
+				}
+			}
+
+			function process(){
+				if(xhr.readyState == 0 || xhr.readyState == 4){
+					education = encodeURIComponent(document.getElementById("userInput").value);
+					xhr.open("GET", "http://localhost:81/test/food_store.php?education="+education, true);
+					xhr.onreadystatechange = handleServerRequest;
+					xhr.send(null);
+				}else{
+					setTimeout('process()', 1000);
+				}
+			}
+
+			function handleServerRequest(){
+				if(xhr.readyState == 4 && xhr.status == 200){
+					xmlResponse = xhr.responseXML;
+					xmlDocumentElement = xmlResponse.documentElement;
+					message = xmlDocumentElement.firstChild.data;
+					document.getElementById("responseServer").innerHTML = '<span style="color:blue">' + message + '</span>';
+					setTimeout('process()', 1000);
+				}else{
+					alert('Something went wrong while processing the request from the server');
+				}
+			}
+
+		</script>
+	</head>
+	<body onload="process()">
+		<h3>The Education Portal</h3>
+		Enter the type of education : <input type="text" id="userInput"/>
+		<div id="responseServer"/>
+	</body>
+</html>

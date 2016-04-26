@@ -1,5 +1,5 @@
 <?php
-header('Content-Type: text/xml')
+header('Content-Type: text/xml');
 echo '<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>';
 
 echo '<response>';
@@ -7,10 +7,10 @@ echo '<response>';
 	$education=$_GET['education'];
 	# Usually this list is taken from the database
 	$educationArray = array('Primary', 'Secondary', 'Tertiary');
-	if(in_array($food, $foodArray))
+	if(in_array($education, $educationArray))
 		echo 'We do offer that education ' .$education.'!';
 	elseif($education=='')
-		echo 'Enter the education that you want to pursue'
+		echo 'Enter the education that you want to pursue';
 	else
 		echo 'Sorry, we do not offer that education '.$education.'!';
 echo '</response>';
